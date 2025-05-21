@@ -7,7 +7,79 @@
     <title>アンケートフォーム</title>
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <style>
-        /* 全体のスタイル */
+        /* 右端の細いナビ（固定） */
+        .side-nav {
+            position: fixed;
+            /* 画面スクロールしても固定 */
+            right: -5px;
+            /* さらに右へ */
+            top: 80%;
+            /* 画面中央に固定 */
+            transform: translateY(-50%) translateX(15px);
+            /* 中央配置と右ずらし */
+            background: #13ca5e;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 4px;
+            border-radius: 10px 0 0 10px;
+            z-index: 1000;
+            width: 35px;
+            /* さらに細く */
+        }
+
+        .side-nav a:active {
+            transform: scale(1.0);
+            /* タップした後に元のサイズに戻す */
+        }
+
+        .side-nav a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-size: 10px;
+            margin: 5px 0;
+            padding: 5px;
+            transition: background 0.3s, transform 0.2s;
+            border-radius: 5px;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+        }
+
+        .side-nav a span {
+            font-size: 24px;
+            /* 矢印をさらに大きく */
+            position: absolute;
+            left: -0px;
+            /* 左端に寄せる */
+            top: 13px;
+            /* さらに下へ */
+        }
+
+        /* スマホ用の微調整 */
+        @media (max-width: 600px) {
+            .side-nav {
+                right: 2px;
+                /* スマホではさらに右端に */
+                width: 30px;
+                /* もっと細く */
+            }
+
+            .side-nav a {
+                width: 28px;
+                height: 28px;
+            }
+
+            .side-nav a i {
+                font-size: 12px;
+                /* スマホではもっと小さく */
+            }
+        }
+
         body {
             font-family: Arial, sans-serif;
             background-color: #f7f7f7;
@@ -29,51 +101,6 @@
             box-sizing: border-box;
         }
 
-        /* 右端の細いナビ（固定） */
-        .side-nav {
-            position: fixed;
-            right: -5px;
-            top: 80%;
-            transform: translateY(-50%) translateX(15px);
-            background: #13ca5e;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 4px;
-            border-radius: 10px 0 0 10px;
-            z-index: 1000;
-            width: 35px;
-        }
-
-        .side-nav a {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-decoration: none;
-            font-size: 10px;
-            margin: 5px 0;
-            padding: 5px;
-            transition: background 0.3s, transform 0.2s;
-            border-radius: 5px;
-            width: 30px;
-            height: 30px;
-            text-align: center;
-        }
-
-        .side-nav a:active {
-            transform: scale(1.0);
-        }
-
-        .side-nav a span {
-            font-size: 24px;
-            position: absolute;
-            left: -0px;
-            top: 13px;
-        }
-
-        /* 見出しスタイル */
         h1 {
             background: linear-gradient(135deg, #1f3134, #507b83);
             color: white;
@@ -89,7 +116,12 @@
             overflow: hidden;
         }
 
-        /* フォーム要素のスタイル */
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
         .label {
             display: block;
             margin-bottom: 10px;
@@ -100,8 +132,33 @@
             border-radius: 6px;
             font-size: 18px;
             text-align: center;
+            /* 中央揃え */
             position: relative;
             overflow: hidden;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .required-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            color: #13ca5e;
+            font-weight: bold;
+            font-size: 0.9em;
+            border-radius: 4px;
+            padding: 2px 6px;
+            border: 2px solid #13ca5e;
         }
 
         input[type="text"],
@@ -117,14 +174,6 @@
             transition: all 0.3s;
         }
 
-        input:focus,
-        textarea:focus {
-            border-color: #13ca5e;
-            outline: none;
-            box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
-        }
-
-        /* ボタングループのスタイル */
         .priority-buttons,
         .demand-buttons,
         .chance-buttons,
@@ -146,23 +195,6 @@
             flex-wrap: wrap;
             gap: 10px;
             margin-bottom: 20px;
-        }
-
-        /* ボタンのスタイル */
-        button {
-            padding: 12px;
-            border: none;
-            border-radius: 6px;
-            background-color: #13ca5e;
-            color: #000000;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        button:hover {
-            background-color: #e9e9e9;
-            transform: scale(1.05);
         }
 
         .priority-buttons button,
@@ -193,44 +225,101 @@
             white-space: nowrap;
         }
 
-        button.active {
+        .priority-buttons button.active,
+        .demand-buttons button.active,
+        .chance-buttons button.active,
+        .Introduction-buttons button.active,
+        .delivery-buttons button.active,
+        .menu-buttons button.active,
+        .reason-buttons button.active,
+        .allergy-buttons button.active,
+        .matuiku-buttons button.active,
+        .life-buttons button.active,
+        .artmake-buttons button.active,
+        .zikosyori-buttons button.active,
+        .hudanzikosyori-buttons button.active,
+        .mayuwax-buttons button.active,
+        .hadasigeki-buttons button.active,
+        .onayami-buttons button.active,
+        .image-buttons button.active {
             background-color: #444;
             color: #fff;
-            outline: 2px solid #696969;
-            outline-offset: 2px;
+        }
+
+        .date-inputs input[type="datetime-local"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
 
         .submit-button {
             width: 100%;
             padding: 15px;
-            font-size: 18px;
-            background-color: #dc3545;
+            border: none;
+            border-radius: 4px;
+            background-color: #322a25;
             color: #fff;
+            font-size: 18px;
+            cursor: pointer;
         }
 
-        .submit-button:hover {
-            background-color: #c82333;
+        .menu-section {
+            display: none;
         }
 
-        /* 必須マークのスタイル */
-        .required {
-            color: #ffffff;
-            font-weight: lighter;
-            font-size: 0.6em;
-            margin-left: 5px;
-            vertical-align: 0.8em;
-            background-color: rgb(255, 15, 15);
-            padding: 0 5px;
-            border-radius: 3px;
-            margin-right: 5px;
+        .menu-section.active {
+            display: block;
         }
 
-        /* 説明テキスト */
+        .current-month {
+            font-size: 16px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .menu-section {
+            display: none;
+        }
+
+        .menu-section.active {
+            display: block;
+        }
+
+        #repairLabel,
+        #repairButtons {
+            display: none;
+        }
+
+        .highlight-background {
+            background-color: #f9f9d6;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            margin-top: 10px;
+            /* 上に余白を追加 */
+        }
+
+        .datetime-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            color: #aaa;
+            font-size: 16px;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        /* 基本スタイル */
         .info-text {
             margin: 20px 0;
             font-family: "Noto Sans JP", "Roboto", sans-serif;
             font-size: 14px;
             color: #333;
+            /* 読みやすい濃い文字色 */
             background-color: #f8f9fa;
             line-height: 1.8;
             text-align: left;
@@ -238,11 +327,115 @@
             padding: 20px;
             border-radius: 8px;
             border: 1px solid #ced4da;
+            max-width: 800px;
+            /* 横幅制限 */
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            /* 軽い影を追加 */
             overflow-y: auto;
+            /* 長文スクロール対応 */
         }
 
-        /* レスポンシブデザイン */
+        /* 見出しスタイル */
+        .info-text h1 {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .info-text h2 {
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+
+        /* 強調テキスト */
+        .info-text strong {
+            color: #007bff;
+        }
+
+        /* モバイル向け調整 */
+        @media (max-width: 768px) {
+            .info-text {
+                font-size: 13px;
+                padding: 15px;
+                max-width: 100%;
+            }
+
+            .info-text h1 {
+                font-size: 16px;
+            }
+
+            .info-text h2 {
+                font-size: 14px;
+            }
+        }
+
+        .info-textmemo {
+            margin-top: 20px;
+            /* 上の余白 */
+            margin-bottom: 10px;
+            /* 下に白い隙間を追加 */
+            font-size: 13px;
+            color: #000000;
+            line-height: 1.5;
+            text-align: center;
+            word-wrap: break-word;
+            background-color: #eef9f5;
+            /* 青っぽい背景色を追加 */
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        /* 携帯端末向けのレスポンシブデザイン */
+        @media (max-width: 768px) {
+            .info-textmemo {
+                font-size: 11.5px;
+                /* スマホでは少し小さく */
+                margin-top: 10px;
+                /* 上下のマージンを調整 */
+                line-height: 2.0;
+                /* テキストの高さ調整 */
+            }
+        }
+
+
+        /* 100点の予約フォームCSS */
+
+        input:focus,
+        textarea:focus {
+            border-color: #13ca5e;
+            outline: none;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+        }
+
+        button {
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background-color: #13ca5e;
+            color: #000000;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background-color: #e9e9e9;
+            transform: scale(1.05);
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            background-color: #dc3545;
+        }
+
+        .submit-button:hover {
+            background-color: #c82333;
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
@@ -256,25 +449,85 @@
             button {
                 font-size: 14px;
             }
+        }
 
-            .side-nav {
-                right: 2px;
-                width: 30px;
-            }
+        button.active {
+            outline: 2px solid #696969;
+            /* ここで枠線を指定 */
+            outline-offset: 2px;
+        }
 
-            .side-nav a {
-                width: 28px;
-                height: 28px;
-            }
+        /* 必須マークのスタイル */
+        .required {
+            color: #ffffff;
+            /* ゴールド（黄色） */
+            font-weight: lighter;
+            /* 文字を細くする */
+            font-size: 0.6em;
+            margin-left: 5px;
+            vertical-align: 0.8em;
+            /* 位置を少し上に調整 */
 
-            .side-nav a i {
-                font-size: 12px;
-            }
+            /* 白色背景の四角形 */
+            background-color: rgb(255, 15, 15);
+            padding: 0 5px;
+            border-radius: 3px;
+            margin-right: 5px;
+        }
 
-            .info-text {
-                font-size: 13px;
-                padding: 15px;
-            }
+        .current-month {
+            text-align: center;
+            display: block;
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%, -10px);
+            /* Y方向に上げる */
+            background-color: #13ca5e;
+            color: #fff;
+            padding: 3px 12px;
+            /* ボックスのパディングを縮小 */
+            border-radius: 8px;
+            /* 角の丸みを少し減少 */
+            font-size: 1.4rem;
+            /* フォントサイズを小さく */
+            font-weight: bold;
+            box-shadow: 0 2px 6px rgba(47, 103, 167, 0.2);
+            /* 影も控えめに */
+        }
+
+        /* ナビゲーションバー */
+        .sidebar {
+            position: fixed;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #1e1e2d;
+            padding: 10px;
+            border-radius: 10px 0 0 10px;
+            z-index: 1000;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 15px;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 10px;
+            background: #4a90e2;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .sidebar a:hover {
+            background: #357ac4;
+        }
+
+        /* スクロール用のセクション */
+        .section {
+            padding: 50px 10px;
+            margin-top: 30px;
         }
     </style>
 </head>
@@ -288,317 +541,470 @@
         </a>
     </div>
 
+    <!--編集箇所（見た目部分）-->
     <div class="container">
         <h1>moonlit<br>お客様カルテ</h1>
         <div class="info-text">以下全て入力後【送信】ボタンを押してください。</div>
 
+        <!--必須を追加する場合　<span class="required">必須</span>-->
         <div class="label"><span class="required">必須</span>お名前(漢字フルネーム/ふりがな)</div>
-        <textarea id="name" rows="1" placeholder="入力してください"></textarea>
+        <textarea id="name" rows="1" placeholder="入力してください"></textarea> <!-- メッセージ入力フィールド -->
 
         <div class="label"><span class="required">必須</span>生年月日(例:西暦記載 ○年○月○日)</div>
-        <textarea id="birthdate" rows="1" placeholder="入力してください"></textarea>
+        <textarea id="message3" rows="1" placeholder="入力してください"></textarea> <!-- メッセージ入力フィールド -->
 
         <div class="label"><span class="required">必須</span>電話番号</div>
-        <textarea id="phone" rows="1" placeholder="入力してください"></textarea>
+        <textarea id="message4" rows="1" placeholder="入力してください"></textarea> <!-- メッセージ入力フィールド -->
 
         <div class="label"><span class="required">必須</span>当サロンをお知りになったきっかけ</div>
         <div class="priority-buttons">
-            <button type="button" id="onepriority" onclick="selectPriority(this)">ご紹介</button>
-            <button type="button" id="twopriority" onclick="selectPriority(this)">HPB</button>
-            <button type="button" id="threepriority" onclick="selectPriority(this)">インスタグラム</button>
-            <button type="button" id="fourpriority" onclick="selectPriority(this)">Google</button>
+            <button type="button" id="onepriority" onclick="selectpriority(this)"> ご紹介</button>
+            <button type="button" id="twopriority" onclick="selectpriority(this)">HPB</button>
+            <button type="button" id="threepriority" onclick="selectpriority(this)">インスタグラム</button>
+            <button type="button" id="fourpriority" onclick="selectpriority(this)">Google</button>
         </div>
 
         <div class="label"><span class="required">必須</span>最終履歴(複数選択)</div>
         <div class="demand-buttons">
-            <button type="button" id="onedemand" onclick="selectDemand(this)">まつ毛エクステ</button>
-            <button type="button" id="twodemand" onclick="selectDemand(this)">まつ毛パーマ</button>
-            <button type="button" id="threedemand" onclick="selectDemand(this)">パリジェンヌ</button>
-            <button type="button" id="fourdemand" onclick="selectDemand(this)">眉毛ワックス</button>
-            <button type="button" id="fivedemand" onclick="selectDemand(this)">ハリウッドブロウリフト</button>
-            <button type="button" id="sixdemand" onclick="selectDemand(this)">何もしたことがない</button>
+            <button type="button" id="onedemand" onclick="selectdemand(this)">まつ毛エクステ</button>
+            <button type="button" id="twodemand" onclick="selectdemand(this)"> まつ毛パーマ</button>
+            <button type="button" id="threedemand" onclick="selectdemand(this)">パリジェンヌ</button>
+            <button type="button" id="fourdemand" onclick="selectdemand(this)">眉毛ワックス</button>
+            <button type="button" id="fivedemand" onclick="selectdemand(this)">ハリウッドブロウリフト</button>
+            <button type="button" id="sixdemand" onclick="selectdemand(this)">何もしたことがない</button>
         </div>
 
         <div class="label">当サロンをお選びいただいた理由</div>
         <div class="reason-buttons">
-            <button type="button" id="onereason" onclick="selectReason(this)">ご紹介者様のすすめ</button>
-            <button type="button" id="tworeason" onclick="selectReason(this)">メニュー内容</button>
-            <button type="button" id="threereason" onclick="selectReason(this)">デザイン</button>
-            <button type="button" id="fourreason" onclick="selectReason(this)">クチコミを見て</button>
-            <button type="button" id="fivereason" onclick="selectReason(this)">家から近い</button>
-            <button type="button" id="sixreason" onclick="selectReason(this)">長く通えるサロンを探している</button>
+            <button type="button" id="onereason" onclick="selectreason(this)">ご紹介者様のすすめ</button>
+            <button type="button" id="tworeason" onclick="selectreason(this)"> メニュー内容</button>
+            <button type="button" id="threereason" onclick="selectreason(this)">デザイン</button>
+            <button type="button" id="fourreason" onclick="selectreason(this)">クチコミを見て</button>
+            <button type="button" id="fivereason" onclick="selectreason(this)">家から近い</button>
+            <button type="button" id="sixreason" onclick="selectreason(this)">長く通えるサロンを探している</button>
         </div>
 
         <div class="label">現在妊娠中ですか？</div>
         <div class="chance-buttons">
-            <button type="button" id="onechance" onclick="selectChance(this)">はい</button>
-            <button type="button" id="twochance" onclick="selectChance(this)">いいえ</button>
+            <button type="button" id="onechance" onclick="selectchance(this)">はい</button>
+            <button type="button" id="twochance" onclick="selectchance(this)">いいえ</button>
         </div>
 
         <div class="label">アレルギーはございますか？</div>
         <div class="allergy-buttons">
-            <button type="button" id="oneallergy" onclick="selectAllergy(this)">はい</button>
-            <button type="button" id="twoallergy" onclick="selectAllergy(this)">いいえ</button>
+            <button type="button" id="oneallergy" onclick="selectallergy(this)">はい</button>
+            <button type="button" id="twoallergy" onclick="selectallergy(this)">いいえ</button>
         </div>
 
         <div class="label">(はい)と答えた方<br>アレルギー名を入力してください</div>
-        <textarea id="allergyDetails" rows="1" placeholder="入力してください"></textarea>
+        <textarea id="message5" rows="1" placeholder="入力してください"></textarea> <!-- メッセージ入力フィールド -->
 
         <div class="label">(まつ毛の方)お悩み (複数選択)</div>
         <div class="Introduction-buttons">
             <button type="button" id="oneIntroduction" onclick="selectIntroduction(this)">エクステは取れやすい方である</button>
             <button type="button" id="twoIntroduction" onclick="selectIntroduction(this)">パーマの持ちが悪い</button>
             <button type="button" id="threeIntroduction" onclick="selectIntroduction(this)">似合うデザインが分からない</button>
-            <button type="button" id="fourIntroduction" onclick="selectIntroduction(this)">施術中涙が出やすい</button>
-            <button type="button" id="fiveIntroduction" onclick="selectIntroduction(this)">施術中しみやすい</button>
+            <button type="button" id="fourIntroduction" onclick="selectIntroduction(this)">施術中涙が出やすい </button>
+            <button type="button" id="fiveIntroduction" onclick="selectIntroduction(this)">施術中しみやすい </button>
         </div>
 
         <div class="label">(まつ毛の方)デザイン希望</div>
         <div class="delivery-buttons">
-            <button type="button" id="onedelivery" onclick="selectDelivery(this)">目の縦幅を強調したい</button>
-            <button type="button" id="twodelivery" onclick="selectDelivery(this)">切れ長</button>
-            <button type="button" id="threedelivery" onclick="selectDelivery(this)">タレ目に見せたい</button>
-            <button type="button" id="fourdelivery" onclick="selectDelivery(this)">ナチュラルデザインにしたい</button>
-            <button type="button" id="fivedelivery" onclick="selectDelivery(this)">悩み中</button>
+            <button type="button" id="onedelivery" onclick="selectdelivery(this)">目の縦幅を強調したい</button>
+            <button type="button" id="twodelivery" onclick="selectdelivery(this)">切れ長</button>
+            <button type="button" id="threedelivery" onclick="selectdelivery(this)">タレ目に見せたい</button>
+            <button type="button" id="fourdelivery" onclick="selectdelivery(this)">ナチュラルデザインにしたい</button>
+            <button type="button" id="fivedelivery" onclick="selectdelivery(this)">悩み中</button>
         </div>
 
         <div class="label">(まつ毛の方)現在マツ育中ですか？</div>
         <div class="matuiku-buttons">
-            <button type="button" id="onematuiku" onclick="selectMatuiku(this)">はい</button>
-            <button type="button" id="twomatuiku" onclick="selectMatuiku(this)">いいえ</button>
+            <button type="button" id="onematuiku" onclick="selectmatuiku(this)">はい</button>
+            <button type="button" id="twomatuiku" onclick="selectmatuiku(this)">いいえ</button>
         </div>
 
         <div class="label">(はい)と答えた方<br>ご使用中の美容液名を入力してください</div>
-        <textarea id="matuikuDetails" rows="1" placeholder="入力してください"></textarea>
+        <textarea id="message6" rows="1" placeholder="入力してください"></textarea> <!-- メッセージ入力フィールド -->
 
         <div class="label">(まつ毛の方)生活習慣について (複数選択)</div>
         <div class="life-buttons">
-            <button type="button" id="onelife" onclick="selectLife(this)">ドライアイである</button>
-            <button type="button" id="twolife" onclick="selectLife(this)">花粉症である</button>
-            <button type="button" id="threelife" onclick="selectLife(this)">コンタクト以外で眼科に通っている</button>
-            <button type="button" id="fourlife" onclick="selectLife(this)">フェイシャルエステに通っている</button>
-            <button type="button" id="fivelife" onclick="selectLife(this)">夏場は水に入る機会が多い</button>
-            <button type="button" id="sixlife" onclick="selectLife(this)">目を触ったり、擦ったりする癖がある</button>
-            <button type="button" id="sevenlife" onclick="selectLife(this)">汗をよくかく</button>
+            <button type="button" id="onelife" onclick="selectlife(this)">ドライアイである</button>
+            <button type="button" id="twolife" onclick="selectlife(this)">花粉症である</button>
+            <button type="button" id="threelife" onclick="selectlife(this)">コンタクト以外で眼科に通っている</button>
+            <button type="button" id="fourlife" onclick="selectlife(this)">フェイシャルエステに通っている </button>
+            <button type="button" id="fivelife" onclick="selectlife(this)">夏場は水に入る機会が多い </button>
+            <button type="button" id="sixIlife" onclick="selectlife(this)">目を触ったり、擦ったりする癖がある </button>
+            <button type="button" id="sevenlife" onclick="selectlife(this)">汗をよくかく </button>
         </div>
 
         <div class="label">(眉毛の方)眉のアートメイクはされたことはありますか？</div>
         <div class="artmake-buttons">
-            <button type="button" id="oneartmake" onclick="selectArtmake(this)">はい</button>
-            <button type="button" id="twoartmake" onclick="selectArtmake(this)">いいえ</button>
+            <button type="button" id="oneartmake" onclick="selectartmake(this)">はい</button>
+            <button type="button" id="twoartmake" onclick="selectartmake(this)">いいえ</button>
         </div>
 
         <div class="label">(眉毛の方)4週間以内に自己処理されてますか？</div>
         <div class="zikosyori-buttons">
-            <button type="button" id="onezikosyori" onclick="selectZikosyori(this)">はい</button>
-            <button type="button" id="twozikosyori" onclick="selectZikosyori(this)">いいえ</button>
+            <button type="button" id="onezikosyori" onclick="selectzikosyori(this)">はい</button>
+            <button type="button" id="twozikosyori" onclick="selectzikosyori(this)">いいえ</button>
         </div>
 
         <div class="label">(眉毛の方)普段の眉毛の自己処理方法 (複数選択)</div>
         <div class="hudanzikosyori-buttons">
-            <button type="button" id="onehudanzikosyori" onclick="selectHudanzikosyori(this)">毛抜き</button>
-            <button type="button" id="twohudanzikosyori" onclick="selectHudanzikosyori(this)">カミソリ</button>
-            <button type="button" id="threehudanzikosyori" onclick="selectHudanzikosyori(this)">シェーバー</button>
-            <button type="button" id="fourhudanzikosyori" onclick="selectHudanzikosyori(this)">ハサミ</button>
-            <button type="button" id="fivehudanzikosyori" onclick="selectHudanzikosyori(this)">美容室</button>
-            <button type="button" id="sixhudanzikosyori" onclick="selectHudanzikosyori(this)">眉サロン</button>
-            <button type="button" id="sevenhudanzikosyori" onclick="selectHudanzikosyori(this)">自己処理をしたことがない</button>
+            <button type="button" id="onehudanzikosyori" onclick="selecthudanzikosyori(this)">毛抜き</button>
+            <button type="button" id="twohudanzikosyori" onclick="selecthudanzikosyori(this)">カミソリ</button>
+            <button type="button" id="threehudanzikosyori" onclick="selecthudanzikosyori(this)">シェーバー</button>
+            <button type="button" id="fourhudanzikosyori" onclick="selecthudanzikosyori(this)">ハサミ </button>
+            <button type="button" id="fivehudanzikosyori" onclick="selecthudanzikosyori(this)">美容室 </button>
+            <button type="button" id="sixIhudanzikosyori" onclick="selecthudanzikosyori(this)">眉サロン </button>
+            <button type="button" id="sevenhudanzikosyori" onclick="selecthudanzikosyori(this)">自己処理をしたことがない </button>
         </div>
 
         <div class="label">(眉毛の方)眉ワックスのご経験はありますか？</div>
         <div class="mayuwax-buttons">
-            <button type="button" id="onemayuwax" onclick="selectMayuwax(this)">はい</button>
-            <button type="button" id="twomayuwax" onclick="selectMayuwax(this)">いいえ</button>
+            <button type="button" id="onemayuwax" onclick="selectmayuwax(this)">はい</button>
+            <button type="button" id="twomayuwax" onclick="selectmayuwax(this)">いいえ</button>
         </div>
 
         <div class="label">(眉毛の方)肌に刺激があったとき赤みは出ますか？</div>
         <div class="hadasigeki-buttons">
-            <button type="button" id="onehadasigeki" onclick="selectHadasigeki(this)">はい</button>
-            <button type="button" id="twohadasigeki" onclick="selectHadasigeki(this)">いいえ</button>
+            <button type="button" id="onehadasigeki" onclick="selecthadasigeki(this)">はい</button>
+            <button type="button" id="twohadasigeki" onclick="selecthadasigeki(this)">いいえ</button>
         </div>
 
         <div class="label">(眉毛の方)お悩み (複数選択)</div>
         <div class="onayami-buttons">
-            <button type="button" id="oneonayami" onclick="selectOnayami(this)">左右対称に描けない</button>
-            <button type="button" id="twoonayami" onclick="selectOnayami(this)">自分に合うデザインが分からない</button>
-            <button type="button" id="threeonayami" onclick="selectOnayami(this)">正しい処理の仕方が分からない</button>
-            <button type="button" id="fouronayami" onclick="selectOnayami(this)">毛が生えない所がある</button>
+            <button type="button" id="oneonayami" onclick="selectonayami(this)">左右対称に描けない</button>
+            <button type="button" id="twoonayami" onclick="selectonayami(this)">自分に合うデザインが分からない</button>
+            <button type="button" id="threeonayami" onclick="selectonayami(this)">正しい処理の仕方が分からない</button>
+            <button type="button" id="fouronayami" onclick="selectonayami(this)">毛が生えない所がある </button>
         </div>
 
         <div class="label">(眉毛の方)なりたい仕上がりのイメージ (複数選択)</div>
         <div class="image-buttons">
-            <button type="button" id="oneimage" onclick="selectImage(this)">並行眉</button>
-            <button type="button" id="twoimage" onclick="selectImage(this)">ストレートアーチ</button>
-            <button type="button" id="threeimage" onclick="selectImage(this)">ナチュラル</button>
-            <button type="button" id="fourimage" onclick="selectImage(this)">おまかせ</button>
+            <button type="button" id="oneimage" onclick="selectimage(this)">並行眉</button>
+            <button type="button" id="twoimage" onclick="selectimage(this)">ストレートアーチ</button>
+            <button type="button" id="threeimage" onclick="selectimage(this)">ナチュラル</button>
+            <button type="button" id="fourimage" onclick="selectimage(this)">おまかせ </button>
         </div>
 
-        <button class="submit-button" onclick="submitForm()" id="section-message">送信</button>
+        <button class="submit-button" onclick="submitForm()" div id="section-message">送信</button>
     </div>
 
-    <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+    <!-------------------------------------------------->
+
+    <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script> <!-- LIFF SDKの読み込み -->
     <script>
-        // グローバル変数の定義
-        let priorityValue = '';
-        let demandValues = [];
-        let reasonValue = '';
-        let chanceValue = '';
-        let allergyValue = '';
-        let introductionValues = [];
-        let deliveryValue = '';
-        let matuikuValue = '';
-        let lifeValues = [];
-        let artmakeValue = '';
-        let zikosyoriValue = '';
-        let hudanzikosyoriValues = [];
-        let mayuwaxValue = '';
-        let hadasigekiValue = '';
-        let onayamiValues = [];
-        let imageValues = [];
+        let priorityCount = '';
+        let demandCount = [];  // 配列として初期化
+        let chanceCount = '';
+        let IntroductionCount = [];  // 配列として初期化
+        let allergyCount = '';
+        let reasonCount = '';
+        let matuikuCount = '';
+        let deliveryCount = '';
+        let lifeCount = [];  // 配列として初期化
+        let artmakeCount = '';  // Count接尾辞を追加
+        let zikosyoriCount = '';
+        let hudanzikosyoriCount = '';
+        let mayuwaxCount = '';
+        let hadasigekiCount = '';
+        let onayamiCount = [];  // 配列として初期化
+        let imageCount = [];  // 配列として初期化
 
         // LIFF初期化
         document.addEventListener('DOMContentLoaded', function () {
-            liff.init({
-                liffId: '2005254357-zKma9BZk' // あなたのLIFF ID
-            }).then(() => {
-                console.log('LIFF初期化成功');
-            }).catch((err) => {
-                console.error('LIFF初期化失敗', err);
-            });
+            // LIFFが定義されているか確認
+            if (typeof liff !== 'undefined') {
+                liff.init({
+                    liffId: '2005254357-zKma9BZk'
+                }).then(() => {
+                    console.log('LIFF初期化成功');
+                }).catch((err) => {
+                    console.error('LIFF初期化失敗', err);
+                    alert('LINEアプリから開いてください。または、ブラウザ更新後にお試しください。');
+                });
+            } else {
+                console.error('LIFF SDKが読み込まれていません');
+                alert('LINEアプリから開いてください。');
+            }
         });
 
-        // 単一選択の処理関数
-        function selectSingleOption(element, buttonsClass, valueVariable) {
-            const buttons = document.querySelectorAll('.' + buttonsClass + ' button');
+        // プレースホルダーを非表示にする関数
+        function hidePlaceholder(placeholderId) {
+            document.getElementById(placeholderId).style.display = 'none';
+        }
+
+        // プレースホルダーを表示する関数（入力がない場合）
+        function showPlaceholder(inputId, placeholderId) {
+            const input = document.getElementById(inputId);
+            if (!input.value) {
+                document.getElementById(placeholderId).style.display = 'inline';
+            }
+        }
+
+        function selectpriority(element) {
+            // 単一選択項目の処理コード
+            const buttons = document.querySelectorAll('.priority-buttons button');
             buttons.forEach(button => button.classList.remove('active'));
+
+            // 選択されたボタンだけにactiveクラスを追加
             element.classList.add('active');
-            window[valueVariable] = element.innerText;
+            priorityCount = element.innerText;
         }
-
-        // 複数選択の処理関数
-        function selectMultipleOptions(element, buttonsClass, valuesArray) {
+        //複数選択のコード
+        function selectdemand(element) {
+            // すでに active クラスが付いていれば外し、付いていなければ追加する（トグル）
             element.classList.toggle('active');
-            const activeButtons = document.querySelectorAll('.' + buttonsClass + ' button.active');
-            window[valuesArray] = Array.from(activeButtons).map(button => button.innerText);
+
+            // 選択されているすべてのボタンのテキストを取得して配列にする
+            const activeButtons = document.querySelectorAll('.demand-buttons button.active');
+            const selectedDemands = Array.from(activeButtons).map(button => button.innerText);
+
+            // 必要に応じて選択された内容を格納
+            demandCount = selectedDemands;  // 配列として保持
         }
 
-        // 単一選択関数
-        function selectPriority(element) {
-            selectSingleOption(element, 'priority-buttons', 'priorityValue');
-        }
+        function selectchance(element) {
+            // 単一選択項目の処理コード
+            const buttons = document.querySelectorAll('.chance-buttons button');
+            buttons.forEach(button => button.classList.remove('active'));
 
-        function selectReason(element) {
-            selectSingleOption(element, 'reason-buttons', 'reasonValue');
-        }
-
-        function selectChance(element) {
-            selectSingleOption(element, 'chance-buttons', 'chanceValue');
-        }
-
-        function selectAllergy(element) {
-            selectSingleOption(element, 'allergy-buttons', 'allergyValue');
-        }
-
-        function selectDelivery(element) {
-            selectSingleOption(element, 'delivery-buttons', 'deliveryValue');
-        }
-
-        function selectMatuiku(element) {
-            selectSingleOption(element, 'matuiku-buttons', 'matuikuValue');
-        }
-
-        function selectArtmake(element) {
-            selectSingleOption(element, 'artmake-buttons', 'artmakeValue');
-        }
-
-        function selectZikosyori(element) {
-            selectSingleOption(element, 'zikosyori-buttons', 'zikosyoriValue');
-        }
-
-        function selectMayuwax(element) {
-            selectSingleOption(element, 'mayuwax-buttons', 'mayuwaxValue');
-        }
-
-        function selectHadasigeki(element) {
-            selectSingleOption(element, 'hadasigeki-buttons', 'hadasigekiValue');
-        }
-
-        // 複数選択関数
-        function selectDemand(element) {
-            selectMultipleOptions(element, 'demand-buttons', 'demandValues');
+            // 選択されたボタンだけにactiveクラスを追加
+            element.classList.add('active');
+            chanceCount = element.innerText;
         }
 
         function selectIntroduction(element) {
-            selectMultipleOptions(element, 'Introduction-buttons', 'introductionValues');
+            // 単一選択項目の処理コード
+            const buttons = document.querySelectorAll('.Introduction-buttons button');
+            buttons.forEach(button => button.classList.remove('active'));
+
+            // 選択されたボタンだけにactiveクラスを追加
+            element.classList.add('active');
+            IntroductionCount = element.innerText;
         }
 
-        function selectLife(element) {
-            selectMultipleOptions(element, 'life-buttons', 'lifeValues');
+        function selectdelivery(element) {
+            // 単一選択項目の処理コード
+            const buttons = document.querySelectorAll('.delivery-buttons button');
+            buttons.forEach(button => button.classList.remove('active'));
+
+            // 選択されたボタンだけにactiveクラスを追加
+            element.classList.add('active');
+            deliveryCount = element.innerText;
         }
 
-        function selectHudanzikosyori(element) {
-            selectMultipleOptions(element, 'hudanzikosyori-buttons', 'hudanzikosyoriValues');
+        //複数選択のコード
+        function selectIntroduction(element) {
+            // すでに active クラスが付いていれば外し、付いていなければ追加する（トグル）
+            element.classList.toggle('active');
+
+            // 選択されているすべてのボタンのテキストを取得して配列にする
+            const activeButtons = document.querySelectorAll('.Introduction-buttons button.active');
+            const selectedIntroduction = Array.from(activeButtons).map(button => button.innerText);
+
+            // 必要に応じて選択された内容を格納
+            IntroductionCount = selectedIntroduction;  // 配列として保持
         }
 
-        function selectOnayami(element) {
-            selectMultipleOptions(element, 'onayami-buttons', 'onayamiValues');
+        function selectallergy(element) {
+            // 単一選択項目の処理コード
+            const buttons = document.querySelectorAll('.allergy-buttons button');
+            buttons.forEach(button => button.classList.remove('active'));
+
+            // 選択されたボタンだけにactiveクラスを追加
+            element.classList.add('active');
+            allergyCount = element.innerText;
         }
 
-        function selectImage(element) {
-            selectMultipleOptions(element, 'image-buttons', 'imageValues');
+        function selectreason(element) {
+            // 単一選択項目の処理コード
+            const buttons = document.querySelectorAll('.reason-buttons button');
+            buttons.forEach(button => button.classList.remove('active'));
+
+            // 選択されたボタンだけにactiveクラスを追加
+            element.classList.add('active');
+            reasonCount = element.innerText;
         }
 
-        // フォーム送信処理
+        function selectmatuiku(element) {
+            // 単一選択項目の処理コード
+            const buttons = document.querySelectorAll('.matuiku-buttons button');
+            buttons.forEach(button => button.classList.remove('active'));
+
+            // 選択されたボタンだけにactiveクラスを追加
+            element.classList.add('active');
+            matuikuCount = element.innerText;
+        }
+
+        //複数選択のコード
+        function selectlife(element) {
+            // すでに active クラスが付いていれば外し、付いていなければ追加する（トグル）
+            element.classList.toggle('active');
+
+            // 選択されているすべてのボタンのテキストを取得して配列にする
+            const activeButtons = document.querySelectorAll('.life-buttons button.active');
+            const selectedlife = Array.from(activeButtons).map(button => button.innerText);
+
+            // 必要に応じて選択された内容を格納
+            lifeCount = selectedlife;  // 配列として保持
+        }
+
+        function selectartmake(element) {
+            // 単一選択項目の処理コード
+            const buttons = document.querySelectorAll('.artmake-buttons button');
+            buttons.forEach(button => button.classList.remove('active'));
+
+            // 選択されたボタンだけにactiveクラスを追加
+            element.classList.add('active');
+            artmakeCount = element.innerText;
+        }
+
+        //複数選択のコード
+        function selectzikosyori(element) {
+            // すでに active クラスが付いていれば外し、付いていなければ追加する（トグル）
+            element.classList.toggle('active');
+
+            // 選択されているすべてのボタンのテキストを取得して配列にする
+            const activeButtons = document.querySelectorAll('.zikosyori-buttons button.active');
+            const selectedzikosyori = Array.from(activeButtons).map(button => button.innerText);
+
+            // 必要に応じて選択された内容を格納
+            zikosyoriCount = selectedzikosyori;  // 配列として保持
+        }
+
+        function selecthudanzikosyori(element) {
+            // 単一選択項目の処理コード
+            const buttons = document.querySelectorAll('.hudanzikosyori-buttons button');
+            buttons.forEach(button => button.classList.remove('active'));
+
+            // 選択されたボタンだけにactiveクラスを追加
+            element.classList.add('active');
+            hudanzikosyoriCount = element.innerText;
+        }
+
+        function selectmayuwax(element) {
+            // 単一選択項目の処理コード
+            const buttons = document.querySelectorAll('.mayuwax-buttons button');
+            buttons.forEach(button => button.classList.remove('active'));
+
+            // 選択されたボタンだけにactiveクラスを追加
+            element.classList.add('active');
+            mayuwaxCount = element.innerText;
+        }
+
+        function selecthadasigeki(element) {
+            // 単一選択項目の処理コード
+            const buttons = document.querySelectorAll('.hadasigeki-buttons button');
+            buttons.forEach(button => button.classList.remove('active'));
+
+            // 選択されたボタンだけにactiveクラスを追加
+            element.classList.add('active');
+            hadasigekiCount = element.innerText;
+        }
+
+        //複数選択のコード
+        function selectonayami(element) {
+            // すでに active クラスが付いていれば外し、付いていなければ追加する（トグル）
+            element.classList.toggle('active');
+
+            // 選択されているすべてのボタンのテキストを取得して配列にする
+            const activeButtons = document.querySelectorAll('.onayami-buttons button.active');
+            const selectedonayami = Array.from(activeButtons).map(button => button.innerText);
+
+            // 必要に応じて選択された内容を格納
+            onayamiCount = selectedonayami;  // 配列として保持
+        }
+
+        //複数選択のコード
+        function selectimage(element) {
+            // すでに active クラスが付いていれば外し、付いていなければ追加する（トグル）
+            element.classList.toggle('active');
+
+            // 選択されているすべてのボタンのテキストを取得して配列にする
+            const activeButtons = document.querySelectorAll('.image-buttons button.active');
+            const selectedimage = Array.from(activeButtons).map(button => button.innerText);
+
+            // 必要に応じて選択された内容を格納
+            imageCount = selectedimage;  // 配列として保持
+        }
+
+        //見た目変更した際に不要な物は消す！
         function submitForm() {
             const name = document.getElementById('name').value;
-            const birthdate = document.getElementById('birthdate').value;
-            const phone = document.getElementById('phone').value;
-            const allergyDetails = document.getElementById('allergyDetails').value;
-            const matuikuDetails = document.getElementById('matuikuDetails').value;
+            const message3 = document.getElementById('message3').value;
+            const message4 = document.getElementById('message4').value;
+            const message5 = document.getElementById('message5').value;
+            const message6 = document.getElementById('message6').value;
 
-            // 必須項目のチェック
+            // フォームデータのチェック
             if (!name) {
                 alert('お名前を入力してください。');
                 return;
             }
-            if (!birthdate) {
+            if (!message3) {
                 alert('生年月日を入力してください。');
                 return;
             }
-            if (!phone) {
+            if (!message4) {
                 alert('電話番号を入力してください。');
                 return;
             }
-            if (!priorityValue) {
+            if (!priorityCount) {
                 alert('当サロンをお知りになったきっかけをご選択ください。');
                 return;
             }
-            if (demandValues.length === 0) {
+            if (demandCount.length === 0) {
                 alert('最終履歴をご選択ください。');
                 return;
             }
 
-            // フォームデータの整形
-            const formattedDemand = demandValues.join('、');
-            const formattedIntroduction = introductionValues.join('、');
-            const formattedLife = lifeValues.join('、');
-            const formattedHudanzikosyori = hudanzikosyoriValues.join('、');
-            const formattedOnayami = onayamiValues.join('、');
-            const formattedImage = imageValues.join('、');
+            // フォームデータの作成
+            const formData = {
+                name,
+                message3,
+                message4,
+                priorityCount,
+                demandCount: Array.isArray(demandCount) ? demandCount.join(', ') : demandCount,
+                reasonCount,
+                chanceCount,
+                allergyCount,
+                message5,
+                IntroductionCount: Array.isArray(IntroductionCount) ? IntroductionCount.join(', ') : IntroductionCount,
+                deliveryCount,
+                matuikuCount,
+                message6,
+                lifeCount: Array.isArray(lifeCount) ? lifeCount.join(', ') : lifeCount,
+                artmakeCount,
+                zikosyoriCount,
+                hudanzikosyoriCount,
+                mayuwaxCount,
+                hadasigekiCount,
+                onayamiCount: Array.isArray(onayamiCount) ? onayamiCount.join(', ') : onayamiCount,
+                imageCount: Array.isArray(imageCount) ? imageCount.join(', ') : imageCount
+            };
 
-            // LINEトークにメッセージを送信
-            liff.sendMessages([{
-                type: 'text',
-                text: `≪アンケート≫\n【お名前】\n・${name}\n\n【生年月日】\n・${birthdate}\n\n【電話番号】\n・${phone}\n\n【当サロンをお知りになったきっかけ】\n・${priorityValue}\n\n【最終履歴】\n・${formattedDemand}\n\n【当サロンをお選びいただいた理由】\n・${reasonValue}\n\n【現在妊娠中ですか？】\n・${chanceValue}\n\n【アレルギーはございますか？】\n・${allergyValue}\n\n【アレルギー名】\n・${allergyDetails}\n\n【(まつ毛の方)お悩み】\n・${formattedIntroduction}\n\n【(まつ毛の方)デザイン希望】\n・${deliveryValue}\n\n【(まつ毛の方)現在マツ育中ですか？】\n・${matuikuValue}\n\n【ご使用中の美容液名】\n・${matuikuDetails}\n\n【(まつ毛の方)生活習慣について】\n・${formattedLife}\n\n【(眉毛の方)眉のアートメイクはされたことはありますか？】\n・${artmakeValue}\n\n【(眉毛の方)4週間以内に自己処理されてますか？】\n・${zikosyoriValue}\n\n【(眉毛の方)普段の眉毛の自己処理方法】\n・${formattedHudanzikosyori}\n\n【(眉毛の方)眉ワックスのご】\n・${formData.mayuwaxCount}\n\n【重要項目の同意】\n・${formData.hadasigekiCount}\n\n【重要項目の同意】\n・${formData.onayamiCount}\n\n【重要項目の同意】\n・${formData.imageCount}`
-}]).then(() => {
-                /* メッセージ送信成功時の処理 */
-                alert('ご記入ありがとうございます。同意書が表示されますので、ご確認ください。');
-                /* LIFFウィンドウを閉じる */
-                liff.closeWindow();
-            }).catch((err) => {
-                /* メッセージ送信失敗時の処理 */
-                console.error('メッセージの送信に失敗しました', err);
-            });
+            // LIFFが初期化されているか確認
+            if (liff.isInClient() && liff.isLoggedIn()) {
+                // LINEトークにメッセージを送信
+                liff.sendMessages([{
+                    type: 'text',
+                    text: `≪アンケート≫\n【お名前】\n・${formData.name}\n\n【生年月日】\n・${formData.message3}\n\n【電話番号】\n・${formData.message4}\n\n【当サロンをお知りになったきっかけ】\n・${formData.priorityCount}\n\n【最終履歴】\n・${formData.demandCount}\n\n【当サロンをお選びいただいた理由】\n・${formData.reasonCount}\n\n【現在妊娠中ですか？】\n・${formData.chanceCount}\n\n【アレルギーはございますか？】\n・${formData.allergyCount}\n\n【アレルギー名】\n・${formData.message5}\n\n【お悩み(まつ毛)】\n・${formData.IntroductionCount}\n\n【デザイン希望】\n・${formData.deliveryCount}\n\n【現在マツ育中ですか？】\n・${formData.matuikuCount}\n\n【ご使用中の美容液名】\n・${formData.message6}\n\n【生活習慣について】\n・${formData.lifeCount}\n\n【眉のアートメイクはされたことはありますか？】\n・${formData.artmakeCount}\n\n【4週間以内に自己処理されてますか？】\n・${formData.zikosyoriCount}\n\n【普段の眉毛の自己処理方法】\n・${formData.hudanzikosyoriCount}\n\n【眉ワックスのご経験はありますか？】\n・${formData.mayuwaxCount}\n\n【肌に刺激があったとき赤みは出ますか？】\n・${formData.hadasigekiCount}\n\n【お悩み(眉毛)】\n・${formData.onayamiCount}\n\n【なりたい仕上がりのイメージ】\n・${formData.imageCount}`
+                }]).then(() => {
+                    alert('ご記入ありがとうございます。');
+                    liff.closeWindow();
+                }).catch((err) => {
+                    console.error('メッセージの送信に失敗しました', err);
+                    alert('送信に失敗しました。もう一度お試しください。');
+                });
+            } else {
+                console.error('LIFFが正しく初期化されていないか、LINEログインしていません');
+                alert('LINEアプリから開いてください。または、ブラウザ更新後にお試しください。');
+
+                // デバッグ用：ブラウザでテストする場合のコンソール出力
+                console.log('送信されるはずのデータ:', formData);
+            }
         }
 
     </script>
