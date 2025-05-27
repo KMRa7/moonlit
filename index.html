@@ -862,26 +862,26 @@
         }
 
         //複数選択のコード
-        function selectzikosyori(element) {
+        function selecthudanzikosyori(element) {
             // すでに active クラスが付いていれば外し、付いていなければ追加する（トグル）
             element.classList.toggle('active');
 
             // 選択されているすべてのボタンのテキストを取得して配列にする
-            const activeButtons = document.querySelectorAll('.zikosyori-buttons button.active');
-            const selectedzikosyori = Array.from(activeButtons).map(button => button.innerText);
+            const activeButtons = document.querySelectorAll('.hudanzikosyori-buttons button.active');
+            const selectedhudanzikosyori = Array.from(activeButtons).map(button => button.innerText);
 
             // 必要に応じて選択された内容を格納
-            zikosyoriCount = selectedzikosyori;  // 配列として保持
+            hudanzikosyoriCount = selectedhudanzikosyori;  // 配列として保持
         }
 
-        function selecthudanzikosyori(element) {
+        function selectzikosyori(element) {
             // 単一選択項目の処理コード
-            const buttons = document.querySelectorAll('.hudanzikosyori-buttons button');
+            const buttons = document.querySelectorAll('.zikosyori-buttons button');
             buttons.forEach(button => button.classList.remove('active'));
 
             // 選択されたボタンだけにactiveクラスを追加
             element.classList.add('active');
-            hudanzikosyoriCount = element.innerText;
+            zikosyoriCount = element.innerText;
         }
 
         function selectmayuwax(element) {
